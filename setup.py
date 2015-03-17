@@ -8,6 +8,12 @@ from setuptools import setup
 def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
+install_requires = [
+    'netifaces',
+    'GitPython',
+    'PyYAML'
+]
+
 setup(
     name = "rosbag_metadata",
     version = "0.1.0",
@@ -16,6 +22,7 @@ setup(
     description = ("Tool for collecting and writing metadata to ROS "
                                    "bagfiles or to accompanying yaml files."),
     license = "MIT",
+    install_requires=install_requires,
     keywords = "ros rosbag metadata",
     url = "http://rosbag-metadata.readthedocs.org/",
     packages=['rosbag_metadata'],
