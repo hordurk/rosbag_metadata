@@ -1,6 +1,8 @@
 import os
 from setuptools import setup
 
+from rosbag_metadata.config import VERSION
+
 # Utility function to read the README file.
 # Used for the long_description.  It's nice, because now 1) we have a top level
 # README file and 2) it's easier to type in the README file than to put a raw
@@ -16,7 +18,7 @@ install_requires = [
 
 setup(
     name = "rosbag_metadata",
-    version = "0.1.0",
+    version = VERSION,
     author = "Hordur K Heidarsson",
     author_email = "hordur@hordur.us",
     description = ("Tool for collecting and writing metadata to ROS "

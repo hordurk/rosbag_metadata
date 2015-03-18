@@ -34,8 +34,11 @@ from .utils import *
 
 class BagMetadataUtility(object):
     """docstring for BagMetadataUtility"""
-    def __init__(self):
+    def __init__(self, default_topic=DEFAULT_TOPIC, metadata_filename=METADATA_FILENAME, **kwargs):
         super(BagMetadataUtility, self).__init__()
+
+        self.metadata_filename = metadata_filename
+        self.default_topic = default_topic
 
     def is_bag_file(self, path):
         if path.endswith('.bag'): #assume it is a bagfile if it ends with .bag
@@ -72,18 +75,18 @@ class BagMetadataUtility(object):
             f.write(metadata_string)
         return (filename, )
 
-    def write_metadata(self, filename, metadata, topic=DEFAULT_TOPIC, overwrite_existing=False):
+    def write_metadata(self, filename, metadata, overwrite_existing=False):
 
         if isinstance(metadata, dict): #convert dict to yaml
             metadata = self.dict_to_yaml(metadata)
 
         if os.path.isdir(filename):
-            return self.write_metadata_file(os.path.join(filename, METADATA_FILENAME), metadata, overwrite_existing=overwrite_existing)
+            return self.write_metadata_file(os.path.join(filename, self.metadata_filename), metadata, overwrite_existing=overwrite_existing)
         elif not os.path.exists(filename):
             return self.write_metadata_file(filename, metadata, overwrite_existing=overwrite_existing)
         else:
             try:
-                return self.inject_to_bag(filename, metadata, topic=topic)
+                return self.inject_to_bag(filename, metadata)
             except rosbag.bag.ROSBagException, e:
                 if e.value == 'This does not appear to be a bag file' or e.value == 'empty file':
                     if overwrite_existing:
@@ -95,7 +98,7 @@ class BagMetadataUtility(object):
         return None
 
 
-    def inject_to_bag(self, bagfile_name, metadata, topic=DEFAULT_TOPIC):
+    def inject_to_bag(self, bagfile_name, metadata):
         with rosbag.Bag(bagfile_name, 'a') as bag:
 
             metadata_msg = std_msgs.msg.String(data=metadata)
@@ -103,17 +106,17 @@ class BagMetadataUtility(object):
             for _, _, t in bag.read_messages():
                 break
 
-            bag.write(topic, metadata_msg, t - rospy.rostime.Duration(0, 1))
+            bag.write(self.default_topic, metadata_msg, t - rospy.rostime.Duration(0, 1))
 
 
     def find_split_files(self, bagfile_name):
         path = os.path.dirname(bagfile_name)
         info = get_info(bagfile_name, freq=False)
 
-    def extract_from_bag(self, bagfile_name, topic='/metadata', use_yaml=True):
+    def extract_from_bag(self, bagfile_name, use_yaml=True):
         with rosbag.Bag(bagfile_name, 'r') as bag:
-            for msg_topic, msg, t in bag.read_messages(topics=[topic,]):
-                if msg_topic == topic:
+            for msg_topic, msg, t in bag.read_messages(topics=[self.default_topic,]):
+                if msg_topic == self.default_topic:
                     found = True
                     break
             if found:
@@ -127,7 +130,7 @@ class BagMetadataUtility(object):
 
     def extract_from_dir(self, dirname, search_bags=True, find_all=False):
         res = []
-        filename = os.path.join(dirname, METADATA_FILENAME)
+        filename = os.path.join(dirname, self.metadata_filename)
         if os.path.exists(filename):
             res.append(self.extract_from_file(filename))
             if not find_all:
@@ -151,18 +154,21 @@ class BagMetadataUtility(object):
             return (filename, yaml.load(data))
         return None
 
-    def extract(self, filename, topic='/metadata', use_yaml=True, find_all=False):
+    def extract(self, filename, use_yaml=True, find_all=False):
         found = False
 
-        # check if path exists
+
         res = []
+
+        if not os.path.exists(filename):
+            return res
 
         # check if directory, then search for metadata files
         if os.path.isdir(filename):
             res = self.extract_from_dir(filename,find_all=find_all)
         else:
             try:
-                res.append(self.extract_from_bag(filename, topic=topic, use_yaml=use_yaml))
+                res.append(self.extract_from_bag(filename, use_yaml=use_yaml))
             except rosbag.bag.ROSBagException, e:
                 if e.value == 'This does not appear to be a bag file' or e.value == 'empty file':
                     res.append(self.extract_from_file(filename))
@@ -179,5 +185,5 @@ class BagMetadataUtility(object):
         return yaml.load(b._get_yaml_info())
 
 
-    def get_full_info(self, bagfile_name, topic='/metadata', freq=True):
-        return dict(self.get_info(bagfile_name, freq=freq).items() + self.extract(bagfile_name, topic=topic, use_yaml=True).items())
+    def get_full_info(self, bagfile_name, freq=True):
+        return dict(self.get_info(bagfile_name, freq=freq).items() + self.extract(bagfile_name, use_yaml=True).items())

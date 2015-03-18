@@ -22,7 +22,7 @@
 
 ABOUT = 'bag_metadata'
 URL = 'https://github.com/hordurk/rosbag_metadata'
-VERSION = '0.1'
+VERSION = '0.1.2'
 OVERWRITE_ASK = -1
 
 METADATA_INFO_FIELD = '_metadata_info'
@@ -30,6 +30,7 @@ SYSTEM_INFO_FIELD = '_system_info'
 BAGS_INFO_FIELD = '_bags'
 
 SYSTEM_FIELDS = (METADATA_INFO_FIELD, SYSTEM_INFO_FIELD, BAGS_INFO_FIELD)
+
 DEFAULT_FIELDS = ('description',)
 
 METADATA_FILENAME = 'metadata.yaml'

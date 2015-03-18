@@ -60,13 +60,14 @@ def get_ip_info():
     return res
 
 class SystemInfoCollector():
-    def __init__(self, usb=True, git=True, ros=True, env=True, full_env=False, ip=True):
-        self.use_usb = usb
-        self.use_git = git
-        self.use_ros = ros
-        self.use_env = env
-        self.use_full_env = full_env
-        self.use_ip = ip
+    def __init__(self, system_info_all=True, system_info_usb=True, system_info_git=True, system_info_ros=True, system_info_env=True, system_info_full_env=False, system_info_ip=True, **kwargs):
+
+        self.use_usb = system_info_usb or system_info_all
+        self.use_git = system_info_git or system_info_all
+        self.use_ros = system_info_ros or system_info_all
+        self.use_env = system_info_env or system_info_all
+        self.use_full_env = system_info_full_env or system_info_all
+        self.use_ip = system_info_ip or system_info_all
 
         self.rospack = rospkg.RosPack()
         self.rosstack = rospkg.RosStack()
