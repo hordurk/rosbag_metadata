@@ -161,12 +161,12 @@ class SystemInfoCollector():
 
     def get_env(self, only_ros=True):
         d = os.environ.copy()
-        if only_ros:
-            for k in d.keys():
-                if not k.startswith('ROS_'):
-                    del d[k]
-                if k == 'ROS_PACKAGE_PATH':
-                    d[k] = d[k].split(':')
+        for k in d.keys():
+            if only_ros and not k.startswith('ROS_'):
+                del d[k]
+                continue
+            if k == 'ROS_PACKAGE_PATH' or k == 'PATH':
+                d[k] = d[k].split(':')
         return d
 
     def get_system_info(self):
