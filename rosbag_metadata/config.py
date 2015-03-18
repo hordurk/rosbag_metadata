@@ -22,7 +22,7 @@
 
 ABOUT = 'bag_metadata'
 URL = 'https://github.com/hordurk/rosbag_metadata'
-VERSION = '0.1.2'
+VERSION = '0.1.3'
 OVERWRITE_ASK = -1
 
 METADATA_INFO_FIELD = '_metadata_info'
