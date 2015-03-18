@@ -103,7 +103,7 @@ def main():
     writegroup.add_argument('--write-rosbag-info', dest='write_rosbag_info', action='store_true', help="Runs 'rosbag info --freq' on each bag files in the directory and saves along with metadata (does not apply to bagfile targets)")
     writegroup.add_argument('--ask-template-defaults', dest='ask_template_defaults', action='store_true', help='Ask for values of fields defined in template even if they have a default value.')
     writegroup.add_argument('--no-extra-fields', dest='extra_fields', action='store_false', help='Do not prompt for extra fields.')
-    writegroup.add_argument('-y', '--yes', dest='yes', action='store_true', help='Do not prompt for overwriting files.')
+    writegroup.add_argument('-y', '--yes', dest='no_prompt', action='store_true', help='Do not prompt for overwriting files.')
 
     systemgroup = parser.add_argument_group('System metadata options')
     systemgroup.add_argument('--no-system-info', dest='system_info', action='store_false', help='Do not collect any system info as part of written metadata')
@@ -231,7 +231,7 @@ def main():
         print(bmu.dict_to_yaml(data))
         print('===============')
 
-    if args.yes:
+    if args.no_prompt:
         overwrite_existing = True
     else:
         overwrite_existing = OVERWRITE_ASK
