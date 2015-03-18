@@ -128,7 +128,7 @@ def main():
 
 
     # bmu only uses non command-line options from the config, so we pass config directly (instead of vars(args))
-    bmu = BagMetadataUtility(**config)
+    bmu = BagMetadataUtility(args.path, **config)
 
     found_data = bmu.extract(args.path, find_all=args.find_all)
     if len(found_data) == 0 or args.clean:

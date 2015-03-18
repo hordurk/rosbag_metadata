@@ -34,9 +34,9 @@ from .utils import *
 
 class BagMetadataUtility(object):
     """docstring for BagMetadataUtility"""
-    def __init__(self, default_topic=DEFAULT_TOPIC, metadata_filename=METADATA_FILENAME, **kwargs):
+    def __init__(self, target, default_topic=DEFAULT_TOPIC, metadata_filename=METADATA_FILENAME, **kwargs):
         super(BagMetadataUtility, self).__init__()
-
+        self.target = target
         self.metadata_filename = metadata_filename
         self.default_topic = default_topic
 
@@ -61,7 +61,7 @@ class BagMetadataUtility(object):
 
 
     def dict_to_yaml(self, data):
-        data['_metadata_info'] = {'creator': 'rosbag_metadata', 'about': ABOUT, 'version': VERSION, 'url': URL, 'date': '%s' % datetime.datetime.now()}
+        data['_metadata_info'] = {'creator': 'rosbag_metadata', 'about': ABOUT, 'version': VERSION, 'url': URL, 'date': '%s' % datetime.datetime.now(), 'path': target}
         return yaml.dump(data)
 
     def write_metadata_file(self, filename, metadata_string, overwrite_existing=False):

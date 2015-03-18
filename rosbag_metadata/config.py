@@ -20,7 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-ABOUT = 'bag_metadata'
+PROG = 'bag_metadata'
+ABOUT = PROG
 URL = 'https://github.com/hordurk/rosbag_metadata'
 VERSION = '0.1.6'
 OVERWRITE_ASK = -1
