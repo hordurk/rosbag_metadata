@@ -114,6 +114,7 @@ class BagMetadataUtility(object):
         info = get_info(bagfile_name, freq=False)
 
     def extract_from_bag(self, bagfile_name, use_yaml=True):
+        found = False
         with rosbag.Bag(bagfile_name, 'r') as bag:
             for msg_topic, msg, t in bag.read_messages(topics=[self.default_topic,]):
                 if msg_topic == self.default_topic:
@@ -155,9 +156,6 @@ class BagMetadataUtility(object):
         return None
 
     def extract(self, filename, use_yaml=True, find_all=False):
-        found = False
-
-
         res = []
 
         if not os.path.exists(filename):
