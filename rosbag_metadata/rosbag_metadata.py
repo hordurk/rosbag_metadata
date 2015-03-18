@@ -143,7 +143,7 @@ def main():
     if args.template:
         template = {}
         try:
-            template = yaml.load(file(args.template, 'r'))
+            template = yaml.load(file(os.path.expanduser(args.template), 'r'))
             for k in template.keys():
                 if template[k] is not None:
                     skip_template_defaults.append(k)
