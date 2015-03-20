@@ -126,12 +126,20 @@ def main():
 
     args = parser.parse_args(remaining_argv)
 
+    if args.debug:
+        print('Arguments:')
+        print(vars(args))
+
+    args.path = os.path.abspath(os.path.expanduser(args.path))
+
 
     # bmu only uses non command-line options from the config, so we pass config directly (instead of vars(args))
     bmu = BagMetadataUtility(args.path, **config)
 
     found_data = bmu.extract(args.path, find_all=args.find_all)
     if len(found_data) == 0 or args.clean:
+        if args.debug:
+            print('No data found at target %s' % args.path)
         existing_data = {}
     else:
         for d in found_data:
@@ -155,6 +163,8 @@ def main():
 
 
     if args.read:
+        if found_data is None or len(found_data) == 0:
+            print('No metadata found in %s' % args.path)
         for d in found_data:
             print('Found the following data in %s:' % d[0])
             print(yaml.dump(d[1]))

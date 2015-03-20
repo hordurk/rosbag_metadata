@@ -61,7 +61,9 @@ class BagMetadataUtility(object):
 
 
     def dict_to_yaml(self, data):
-        data['_metadata_info'] = {'creator': 'rosbag_metadata', 'about': ABOUT, 'version': VERSION, 'url': URL, 'date': '%s' % datetime.datetime.now(), 'path': target}
+        data['_metadata_info'] = {'creator': PROG, 'about': ABOUT,
+         'version': VERSION, 'url': URL, 'date': '%s' % datetime.datetime.now(),
+         'path': self.target}
         return yaml.dump(data)
 
     def write_metadata_file(self, filename, metadata_string, overwrite_existing=False):
