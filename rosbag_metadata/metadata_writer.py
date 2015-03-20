@@ -56,7 +56,7 @@ class BagMetadataUtility(object):
             path = os.path.dirname(path)
         for f in os.listdir(path):
             if f.endswith('.bag'):
-                res[f] = self.get_info(f)
+                res[f] = self.get_info(os.path.join(path,f))
         return res
 
 
@@ -142,7 +142,7 @@ class BagMetadataUtility(object):
         if search_bags:
             for f in os.listdir(dirname):
                 if f.endswith('.bag'):
-                    r = self.extract_from_bag(f)
+                    r = self.extract_from_bag(os.path.join(dirname,f))
                     if r is not None:
                         res.append(r)
                         if not find_all:

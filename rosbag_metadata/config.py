@@ -23,7 +23,7 @@
 PROG = 'bag_metadata'
 ABOUT = PROG
 URL = 'https://github.com/hordurk/rosbag_metadata'
-VERSION = '0.1.6'
+VERSION = '0.1.7'
 OVERWRITE_ASK = -1
 
 METADATA_INFO_FIELD = '_metadata_info'
