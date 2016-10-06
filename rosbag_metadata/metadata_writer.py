@@ -102,13 +102,9 @@ class BagMetadataUtility(object):
 
     def inject_to_bag(self, bagfile_name, metadata):
         with rosbag.Bag(bagfile_name, 'a') as bag:
-
             metadata_msg = std_msgs.msg.String(data=metadata)
-
-            for _, _, t in bag.read_messages():
-                break
-
-            bag.write(self.default_topic, metadata_msg, t - rospy.rostime.Duration(0, 1))
+            t = rospy.Time(bag.get_end_time())
+            bag.write(self.default_topic, metadata_msg, t + rospy.rostime.Duration(0, 1))
 
 
     def find_split_files(self, bagfile_name):
